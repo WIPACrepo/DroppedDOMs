@@ -14,6 +14,13 @@
 		E83EC35A1BA4B48C00925856 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E83EC3581BA4B48C00925856 /* LaunchScreen.storyboard */; };
 		E83EC3651BA4B48C00925856 /* DroppedDOMsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3641BA4B48C00925856 /* DroppedDOMsTests.swift */; };
 		E83EC3701BA4B48C00925856 /* DroppedDOMsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC36F1BA4B48C00925856 /* DroppedDOMsUITests.swift */; };
+		E83EC37E1BA4B57600925856 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC3811BA4B59700925856 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC37F1BA4B59700925856 /* Keychain.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC3821BA4B59700925856 /* LiveAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3801BA4B59700925856 /* LiveAPI.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC3841BA4B5B000925856 /* DroppedDOMs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC3871BA4B5D600925856 /* LiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3851BA4B5D600925856 /* LiveAPITests.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC3881BA4B5D600925856 /* RestAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3861BA4B5D600925856 /* RestAPITests.swift */; settings = {ASSET_TAGS = (); }; };
+		E83EC38A1BA4BF7000925856 /* TestUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3891BA4BF7000925856 /* TestUtil.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +54,13 @@
 		E83EC36B1BA4B48C00925856 /* DroppedDOMsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DroppedDOMsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83EC36F1BA4B48C00925856 /* DroppedDOMsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppedDOMsUITests.swift; sourceTree = "<group>"; };
 		E83EC3711BA4B48C00925856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		E83EC37F1BA4B59700925856 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		E83EC3801BA4B59700925856 /* LiveAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAPI.swift; sourceTree = "<group>"; };
+		E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroppedDOMs.swift; sourceTree = "<group>"; };
+		E83EC3851BA4B5D600925856 /* LiveAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAPITests.swift; sourceTree = "<group>"; };
+		E83EC3861BA4B5D600925856 /* RestAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPITests.swift; sourceTree = "<group>"; };
+		E83EC3891BA4BF7000925856 /* TestUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtil.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +111,10 @@
 		E83EC34E1BA4B48C00925856 /* DroppedDOMs */ = {
 			isa = PBXGroup;
 			children = (
+				E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */,
+				E83EC37F1BA4B59700925856 /* Keychain.swift */,
+				E83EC3801BA4B59700925856 /* LiveAPI.swift */,
+				E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */,
 				E83EC34F1BA4B48C00925856 /* AppDelegate.swift */,
 				E83EC3511BA4B48C00925856 /* ViewController.swift */,
 				E83EC3531BA4B48C00925856 /* Main.storyboard */,
@@ -110,6 +128,9 @@
 		E83EC3631BA4B48C00925856 /* DroppedDOMsTests */ = {
 			isa = PBXGroup;
 			children = (
+				E83EC3891BA4BF7000925856 /* TestUtil.swift */,
+				E83EC3851BA4B5D600925856 /* LiveAPITests.swift */,
+				E83EC3861BA4B5D600925856 /* RestAPITests.swift */,
 				E83EC3641BA4B48C00925856 /* DroppedDOMsTests.swift */,
 				E83EC3661BA4B48C00925856 /* Info.plist */,
 			);
@@ -255,7 +276,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E83EC37E1BA4B57600925856 /* SwiftyJSON.swift in Sources */,
+				E83EC3811BA4B59700925856 /* Keychain.swift in Sources */,
 				E83EC3521BA4B48C00925856 /* ViewController.swift in Sources */,
+				E83EC3841BA4B5B000925856 /* DroppedDOMs.swift in Sources */,
+				E83EC3821BA4B59700925856 /* LiveAPI.swift in Sources */,
 				E83EC3501BA4B48C00925856 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,7 +289,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E83EC3871BA4B5D600925856 /* LiveAPITests.swift in Sources */,
+				E83EC3881BA4B5D600925856 /* RestAPITests.swift in Sources */,
 				E83EC3651BA4B48C00925856 /* DroppedDOMsTests.swift in Sources */,
+				E83EC38A1BA4BF7000925856 /* TestUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
