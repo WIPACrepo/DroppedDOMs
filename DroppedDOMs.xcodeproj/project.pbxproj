@@ -14,7 +14,6 @@
 		E83EC35A1BA4B48C00925856 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E83EC3581BA4B48C00925856 /* LaunchScreen.storyboard */; };
 		E83EC3651BA4B48C00925856 /* DroppedDOMsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3641BA4B48C00925856 /* DroppedDOMsTests.swift */; };
 		E83EC3701BA4B48C00925856 /* DroppedDOMsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC36F1BA4B48C00925856 /* DroppedDOMsUITests.swift */; };
-		E83EC37E1BA4B57600925856 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */; settings = {ASSET_TAGS = (); }; };
 		E83EC3811BA4B59700925856 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC37F1BA4B59700925856 /* Keychain.swift */; settings = {ASSET_TAGS = (); }; };
 		E83EC3821BA4B59700925856 /* LiveAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3801BA4B59700925856 /* LiveAPI.swift */; settings = {ASSET_TAGS = (); }; };
 		E83EC3841BA4B5B000925856 /* DroppedDOMs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */; settings = {ASSET_TAGS = (); }; };
@@ -54,7 +53,6 @@
 		E83EC36B1BA4B48C00925856 /* DroppedDOMsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DroppedDOMsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83EC36F1BA4B48C00925856 /* DroppedDOMsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppedDOMsUITests.swift; sourceTree = "<group>"; };
 		E83EC3711BA4B48C00925856 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		E83EC37F1BA4B59700925856 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		E83EC3801BA4B59700925856 /* LiveAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAPI.swift; sourceTree = "<group>"; };
 		E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroppedDOMs.swift; sourceTree = "<group>"; };
@@ -114,7 +112,6 @@
 				E83EC3831BA4B5B000925856 /* DroppedDOMs.swift */,
 				E83EC37F1BA4B59700925856 /* Keychain.swift */,
 				E83EC3801BA4B59700925856 /* LiveAPI.swift */,
-				E83EC37D1BA4B57600925856 /* SwiftyJSON.swift */,
 				E83EC34F1BA4B48C00925856 /* AppDelegate.swift */,
 				E83EC3511BA4B48C00925856 /* ViewController.swift */,
 				E83EC3531BA4B48C00925856 /* Main.storyboard */,
@@ -276,7 +273,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E83EC37E1BA4B57600925856 /* SwiftyJSON.swift in Sources */,
 				E83EC3811BA4B59700925856 /* Keychain.swift in Sources */,
 				E83EC3521BA4B48C00925856 /* ViewController.swift in Sources */,
 				E83EC3841BA4B5B000925856 /* DroppedDOMs.swift in Sources */,
@@ -511,6 +507,7 @@
 				E83EC3761BA4B48C00925856 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E83EC3771BA4B48C00925856 /* Build configuration list for PBXNativeTarget "DroppedDOMsTests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +516,7 @@
 				E83EC3791BA4B48C00925856 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E83EC37A1BA4B48C00925856 /* Build configuration list for PBXNativeTarget "DroppedDOMsUITests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +525,7 @@
 				E83EC37C1BA4B48C00925856 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
