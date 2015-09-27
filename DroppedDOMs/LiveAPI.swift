@@ -21,7 +21,7 @@ protocol RequestSubject: AnyObject {
 }
 
 protocol JSONRequester {
-    func request(subject: RequestSubject, url: NSURL, postData: NSData, immediately: Bool) -> JSONResult
+    func request(subject: RequestSubject, url: NSURL, postData: NSData) -> JSONResult
 }
 
 class DefaultRequester: JSONRequester {
@@ -29,11 +29,10 @@ class DefaultRequester: JSONRequester {
     ///
     /// - parameter NSURL: target URL
     /// - parameter NSData: data sent as part of the POST
-    /// - parameter Bool: `true` if call should be done synchronously
     /// - returns: - `JSONResult.Success` if the call succeeded
     ///           - `JSONResult.Delayed` for asynchronous calls
     ///           - `JSONResult.Error` if there was a problem
-    func request(subject: RequestSubject, url: NSURL, postData: NSData, immediately: Bool) -> JSONResult {
+    func request(subject: RequestSubject, url: NSURL, postData: NSData) -> JSONResult {
 
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
@@ -42,32 +41,9 @@ class DefaultRequester: JSONRequester {
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        if !immediately {
-            startAsynchronous(request, subject: subject)
+        startAsynchronous(request, subject: subject)
    
-            return .Delayed
-        }
-
-        var response: NSURLResponse?
-        
-        let (respData, respError) = startSynchronous(request, response: &response)
-        if respError != nil {
-            return .Error(message: respError!.localizedDescription)
-        }
-        
-        if let resp = response as? NSHTTPURLResponse {
-            if resp.statusCode != 200 {
-                return .Error(message: "HTTP status \(resp.statusCode)")
-            }
-        }
-        
-        if let newdata = respData {
-            subject.appendData(newdata)
-            
-            return subject.processData()
-        }
-        
-        return .Error(message: "No data returned")
+        return .Delayed
     }
     
     func startAsynchronous(request: NSURLRequest, subject: RequestSubject) {
@@ -81,15 +57,6 @@ class DefaultRequester: JSONRequester {
             }
         }
         task.resume()
-    }
-    
-    func startSynchronous(request: NSURLRequest, inout response: NSURLResponse?) -> (NSData?, NSError?) {
-        do {
-            let data = try NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)
-            return (data, nil)
-        } catch let error as NSError {
-            return (nil, error)
-        }
     }
 }
 
@@ -134,12 +101,11 @@ public class RestAPI: NSObject, RequestSubject {
     ///
     /// - parameter NSURL: target URL
     /// - parameter NSData: data sent as part of the POST
-    /// - parameter Bool: `true` if call should be done synchronously
     /// - returns: - `JSONResult.Success` if the call succeeded
     ///           - `JSONResult.Delayed` for asynchronous calls
     ///           - `JSONResult.Error` if there was a problem
-    func restCall(url: NSURL, postData: NSData, immediately: Bool) -> JSONResult {
-        return requester.request(self, url: url, postData: postData, immediately: immediately)
+    func restCall(url: NSURL, postData: NSData) -> JSONResult {
+        return requester.request(self, url: url, postData: postData)
     }
     
     /// Append next chunk of data to internal cache
@@ -263,7 +229,7 @@ public class LiveAPI: RestAPI {
             return .Error(message: "Cannot encode username and/or password")
         }
         
-        return restCall(url, postData: postData, immediately: immediately)
+        return restCall(url, postData: postData)
     }
 
     /// Pass error to delegate

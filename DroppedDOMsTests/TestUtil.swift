@@ -17,7 +17,7 @@ class MockRequester: JSONRequester {
         result = nil
     }
     
-    func request(subject: RequestSubject, url: NSURL, postData: NSData, immediately: Bool) -> JSONResult {
+    func request(subject: RequestSubject, url: NSURL, postData: NSData) -> JSONResult {
         //print("url \(url) post \(postData)")
         if let r = result {
             return r

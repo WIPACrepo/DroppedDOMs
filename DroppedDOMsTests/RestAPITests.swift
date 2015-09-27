@@ -16,10 +16,6 @@ class MyRequester: DefaultRequester {
     override func startAsynchronous(request: NSURLRequest, subject: RequestSubject) {
         // does nothing
     }
-
-    override func startSynchronous(request: NSURLRequest, inout response: NSURLResponse?) -> (NSData?, NSError?) {
-        return (data, error)
-    }
 }
 
 class MySubject: RequestSubject {
@@ -37,7 +33,6 @@ class MySubject: RequestSubject {
     func processError(_: NSError) {
         XCTFail("Should not receive error")
     }
-    
 }
 
 class DefaultRequesterTests: XCTestCase {
@@ -45,70 +40,11 @@ class DefaultRequesterTests: XCTestCase {
         let fakeURL = NSURL(fileURLWithPath: "/foo/bar")
         let fakeData = "xxx".dataUsingEncoding(NSUTF8StringEncoding)!
         let req = MyRequester()
-        switch req.request(MySubject(), url: fakeURL, postData: fakeData, immediately: false) {
+        switch req.request(MySubject(), url: fakeURL, postData: fakeData) {
         case .Delayed:
             break
         default:
             XCTFail("Should return Delayed")
-        }
-    }
-    
-    func testImmediateNoData() {
-        let fakeURL = NSURL(fileURLWithPath: "/foo/bar")
-        let fakeData = "xxx".dataUsingEncoding(NSUTF8StringEncoding)!
-        let req = MyRequester()
-        let resp = req.request(MySubject(), url: fakeURL, postData: fakeData, immediately: true)
-        switch resp {
-        case .Success:
-            XCTFail("Should not return Success")
-        case .Error(let msg):
-            XCTAssertEqual(msg, "No data returned",
-                "Unexpected error message \(msg)")
-        case .Delayed:
-            XCTFail("Should not return Delayed")
-        }
-    }
-    
-    func testImmediateError() {
-        let fakeURL = NSURL(fileURLWithPath: "/foo/bar")
-        let fakeData = "xxx".dataUsingEncoding(NSUTF8StringEncoding)!
-        
-        let req = MyRequester()
-        req.data = fakeData
-        
-        let subj = MySubject()
-        subj.result = JSONResult.Error(message: "ImmediateFail")
-        
-        let resp = req.request(subj, url: fakeURL, postData: fakeData, immediately: true)
-        switch resp {
-        case .Success:
-            XCTFail("Should not return Success")
-        case .Error(let msg):
-            XCTAssertEqual(msg, "ImmediateFail",
-                "Unexpected error message \(msg)")
-        case .Delayed:
-            XCTFail("Should not return Delayed")
-        }
-    }
-    
-    func testImmediateSuccess() {
-        let fakeURL = NSURL(fileURLWithPath: "/foo/bar")
-        let fakeData = "xxx".dataUsingEncoding(NSUTF8StringEncoding)!
-        
-        let req = MyRequester()
-        req.data = fakeData
-        
-        let subj = MySubject()
-        subj.result = JSONResult.Success(data: ["abc": "def"])
-        
-        let resp = req.request(subj, url: fakeURL, postData: fakeData, immediately: true)
-        switch resp {
-        case .Success:
-            break
-        case .Error:
-            XCTFail("Should not return Error")
-        case .Delayed:
-            XCTFail("Should not return Delayed")
         }
     }
 }

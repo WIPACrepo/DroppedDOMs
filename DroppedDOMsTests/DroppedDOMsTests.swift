@@ -96,7 +96,7 @@ class DroppedDOMsTests: XCTestCase {
             }
         }
     }
-    
+
     func createDictFromList(expDOMs: [MyDOM]) -> [[String: AnyObject]] {
         var dict: [[String: AnyObject]] = []
         for dom in expDOMs {
@@ -104,13 +104,13 @@ class DroppedDOMsTests: XCTestCase {
         }
         return dict
     }
-    
+
     func createDOMs() -> [MyDOM] {
         return [
             MyDOM(mbid: 1234567890, name: "ABC", string: 12, position: 34, droptime: "2015-08-09 12:34:56"),
         ]
     }
-    
+
     func testLoadUnknown() {
         let dd = DroppedDOMs()
         let rtnval = dd.load(["abc": "def"])
@@ -123,7 +123,7 @@ class DroppedDOMsTests: XCTestCase {
         XCTAssertEqual(dd.count, 0,
             "Unexpected number of values  \(dd.count) for unknown message")
     }
-    
+
     func testLoadMoniFileBad() {
         let dd = DroppedDOMs()
         let rtnval = dd.load(["moni_file": "xxx"])
