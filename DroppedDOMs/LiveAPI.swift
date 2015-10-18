@@ -236,14 +236,18 @@ public class LiveAPI: RestAPI {
     ///
     /// - parameter NSError: error returned by REST call
     override func didReceiveError(error: NSError) {
-        delegate?.didReceiveError(error)
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            delegate?.didReceiveError(error)
+        }
     }
 
     /// Pass response to delegate
     ///
     /// - parameter AnyObject: JSON response
     override func didReceiveResponse(jsondata: [String: AnyObject]) {
-        delegate?.didReceiveResponse(jsondata)
+        NSOperationQueue.mainQueue().addOperationWithBlock {
+            delegate?.didReceiveResponse(jsondata)
+        }
     }
 }
 
