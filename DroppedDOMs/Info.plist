@@ -47,6 +47,11 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 			<key>live.icecube.wisc.edu</key>
 			<dict>
 				<key>NSTemporaryExceptionRequiresForwardSecrecy</key>

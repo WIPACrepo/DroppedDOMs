@@ -15,8 +15,7 @@ public enum JSONResult {
 }
 
 protocol RequestSubject: AnyObject {
-    func appendData(_: NSData)
-    func processData() -> JSONResult
+    func processData(data: NSData)
     func processError(_: NSError)
 }
 
@@ -53,7 +52,11 @@ class DefaultRequester: JSONRequester {
             if error != nil {
                 subject.processError(error!)
             } else if data != nil {
-                subject.appendData(data!)
+                subject.processData(data!)
+            } else {
+                let errmsg = "Request did not return any data"
+                let error = NSError(domain: "RESTAPI", code: 600, userInfo: ["message": errmsg])
+                subject.processError(error)
             }
         }
         task.resume()
@@ -68,7 +71,6 @@ extension String {
 }
 
 public class RestAPI: NSObject, RequestSubject {
-    var data: NSMutableData = NSMutableData()
     var requester: JSONRequester = DefaultRequester()
 
     /// Convert a dictionary of strings to a POST-ready data object.
@@ -108,76 +110,49 @@ public class RestAPI: NSObject, RequestSubject {
         return requester.request(self, url: url, postData: postData)
     }
     
-    /// Append next chunk of data to internal cache
-    public func appendData(data: NSData) {
-        self.data.appendData(data)
-    }
-    
     /// Convert accumulated JSON data into native data structures.
     ///
     /// - returns: - `JSONResult.Success` if the data was converted
     ///           - `JSONResult.Error` if there was a problem
-    public func processData() -> JSONResult {
+    public func processData(data: NSData) {
         var jsonError: NSError?
 
+        print("Data \(data)")
         var rawResult: AnyObject?
         do {
-            rawResult = try NSJSONSerialization.JSONObjectWithData(self.data, options:NSJSONReadingOptions.MutableContainers)
+            rawResult = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers)
         } catch let error as NSError {
+            print("Conversion failed: \(error)")
             jsonError = error
             rawResult = nil
         }
         if jsonError == nil {
             if let result = rawResult as? [String: AnyObject] {
-                return .Success(data: result)
+                didReceiveResponse(result)
+                return
             }
+            let errmsg = "Could not convert response to dictionary"
+            let error = NSError(domain: "LiveAPI", code: 6661, userInfo: ["message": errmsg])
+            didReceiveError(error)
+            return
         }
 
-        let bogus = NSString(data: self.data, encoding:NSUTF8StringEncoding)
+        let bogus = NSString(data: data, encoding:NSUTF8StringEncoding)
 
+        var errmsg: String
         if jsonError != nil {
-            return .Error(message: "JSON \(bogus) error \(jsonError)")
+            errmsg = "JSON \(bogus) error \(jsonError)"
+        } else {
+            errmsg = "Bad JSON string \(bogus)"
         }
 
-        return .Error(message: "Bad JSON string \(bogus)")
-        
+        print("LiveAPI error \(errmsg)")
+        let error = NSError(domain: "LiveAPI", code: 6662, userInfo: ["message": errmsg])
+        didReceiveError(error)
     }
 
     func processError(error: NSError) {
         didReceiveError(error)
-    }
-
-    // NSURLConnection delegate method
-    func connection(connection: NSURLConnection!, didFailWithError error: NSError!) {
-        didReceiveError(error)
-    }
-    
-    // NSURLConnection delegate method
-    func connection(didReceiveResponse: NSURLConnection!, didReceiveResponse response: NSURLResponse!) {
-        //New request so we need to clear the data object
-        self.data = NSMutableData()
-    }
-    
-    // NSURLConnection delegate method
-    func connection(connection: NSURLConnection!, didReceiveData data: NSData!) {
-        //Append incoming data
-        self.data.appendData(data)
-    }
-    
-    // NSURLConnection delegate method
-    func connectionDidFinishLoading(connection: NSURLConnection!) {
-        //Finished receiving data and convert it to a JSON object
-        //var err: NSError
-        let result = processData()
-        switch result {
-        case .Success(let data):
-            didReceiveResponse(data)
-        case .Delayed:
-            print("Strange, processData() returned .Delayed")
-        case .Error(let message):
-            let error = NSError(domain: "LiveAPI", code: 666, userInfo: ["message": message])
-            didReceiveError(error)
-        }
     }
 
     /// Subclasses should override this function to process errors
@@ -219,8 +194,16 @@ public class LiveAPI: RestAPI {
     /// - parameter Bool: if `true`, simulate fetch via Dave's CGI-BIN script
     /// - returns: JSONResult
     func droppedDOMs(runNumber: Int, immediately: Bool) -> JSONResult {
-        
-        let url: NSURL! = NSURL(string: "\(rootURL)/dropped_dom_json/\(runNumber)/")
+
+        var cmd: String
+        if rootURL.rangeOfString("localhost/~dglo") == nil {
+            cmd = "dropped_dom_json"
+        } else {
+            cmd = "dropped_dom_json.py"
+        }
+
+        let fullURL = "\(rootURL)/\(cmd)/\(runNumber)/"
+        let url: NSURL! = NSURL(string: fullURL)
         
         var postData: NSData
         if let pd = dictToPostData(["user": self.username, "pass": self.password]) {
@@ -228,7 +211,7 @@ public class LiveAPI: RestAPI {
         } else {
             return .Error(message: "Cannot encode username and/or password")
         }
-        
+
         return restCall(url, postData: postData)
     }
 

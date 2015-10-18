@@ -20,6 +20,7 @@
 		E83EC3871BA4B5D600925856 /* LiveAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3851BA4B5D600925856 /* LiveAPITests.swift */; settings = {ASSET_TAGS = (); }; };
 		E83EC3881BA4B5D600925856 /* RestAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3861BA4B5D600925856 /* RestAPITests.swift */; settings = {ASSET_TAGS = (); }; };
 		E83EC38A1BA4BF7000925856 /* TestUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83EC3891BA4BF7000925856 /* TestUtil.swift */; settings = {ASSET_TAGS = (); }; };
+		E8A77C2F1BD43253002BF21A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E8A77C2E1BD43253002BF21A /* Default-568h@2x.png */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		E83EC3851BA4B5D600925856 /* LiveAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveAPITests.swift; sourceTree = "<group>"; };
 		E83EC3861BA4B5D600925856 /* RestAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPITests.swift; sourceTree = "<group>"; };
 		E83EC3891BA4BF7000925856 /* TestUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtil.swift; sourceTree = "<group>"; };
+		E8A77C2E1BD43253002BF21A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 				E83EC3531BA4B48C00925856 /* Main.storyboard */,
 				E83EC3561BA4B48C00925856 /* Assets.xcassets */,
 				E83EC3581BA4B48C00925856 /* LaunchScreen.storyboard */,
+				E8A77C2E1BD43253002BF21A /* Default-568h@2x.png */,
 				E83EC35B1BA4B48C00925856 /* Info.plist */,
 			);
 			path = DroppedDOMs;
@@ -247,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E83EC35A1BA4B48C00925856 /* LaunchScreen.storyboard in Resources */,
+				E8A77C2F1BD43253002BF21A /* Default-568h@2x.png in Resources */,
 				E83EC3571BA4B48C00925856 /* Assets.xcassets in Resources */,
 				E83EC3551BA4B48C00925856 /* Main.storyboard in Resources */,
 			);

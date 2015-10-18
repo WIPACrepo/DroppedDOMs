@@ -49,7 +49,6 @@ class ViewController: UIViewController, LiveAPIProtocol {
     }
 
     @IBAction func query(sender: AnyObject) {
-        print("QTop")
         guard let username = usernameField.text else {
             showError("Missing name", "Please enter user name")
             return
@@ -70,7 +69,6 @@ class ViewController: UIViewController, LiveAPIProtocol {
             return
         }
 
-        print("QMid")
         if username != "" {
             NSUserDefaults.standardUserDefaults().setObject(username, forKey: usernameKey)
             if !Keychain.setString(password, forKey: username) {
@@ -78,19 +76,16 @@ class ViewController: UIViewController, LiveAPIProtocol {
             }
         }
 
-        let debug = false
+        let debug = true
         var rootURL: String
         if debug {
             rootURL = "http://localhost/~dglo/cgi-bin"
         } else {
             rootURL = "https://live.icecube.wisc.edu"
         }
-        print("QAPI \(username)")
         let live = LiveAPI(rootURL: rootURL, username: username, password: password)
         live.delegate = self
-        print("QSend")
         live.droppedDOMs(runNum, immediately: false)
-        print("QDone")
     }
 
     // LiveAPIProtocol method
