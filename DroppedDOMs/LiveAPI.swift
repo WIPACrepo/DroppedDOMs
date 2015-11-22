@@ -41,10 +41,10 @@ class DefaultRequester: JSONRequester {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
         startAsynchronous(request, subject: subject)
-   
+
         return .Delayed
     }
-    
+
     func startAsynchronous(request: NSURLRequest, subject: RequestSubject) {
         let session = NSURLSession.sharedSession()
         let task = session.dataTaskWithRequest(request) {
@@ -87,18 +87,18 @@ public class RestAPI: NSObject, RequestSubject {
             if let ekey = dkey.urlEncode() {
                 if let eval = dval.urlEncode() {
                     list.append("\(ekey)=\(eval)")
-                } else {
-                    return nil
+                    continue
                 }
-            } else {
-                return nil
             }
+
+            return nil
         }
 
         let joined = list.joinWithSeparator("&")
-        return joined.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: true)
+        return joined.dataUsingEncoding(NSASCIIStringEncoding,
+                                        allowLossyConversion: true)
     }
-    
+
     /// Send a POST request to the url and return the result.
     ///
     /// - parameter NSURL: target URL
@@ -109,7 +109,7 @@ public class RestAPI: NSObject, RequestSubject {
     func restCall(url: NSURL, postData: NSData) -> JSONResult {
         return requester.request(self, url: url, postData: postData)
     }
-    
+
     /// Convert accumulated JSON data into native data structures.
     ///
     /// - returns: - `JSONResult.Success` if the data was converted
@@ -117,7 +117,6 @@ public class RestAPI: NSObject, RequestSubject {
     public func processData(data: NSData) {
         var jsonError: NSError?
 
-        print("Data \(data)")
         var rawResult: AnyObject?
         do {
             rawResult = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers)
@@ -190,10 +189,8 @@ public class LiveAPI: RestAPI {
     /// Fetch the list of dropped DOMs for a run.
     ///
     /// - parameter Int: IceCube run number
-    /// - parameter Bool: if `true`, synchronously fetch results
-    /// - parameter Bool: if `true`, simulate fetch via Dave's CGI-BIN script
     /// - returns: JSONResult
-    func droppedDOMs(runNumber: Int, immediately: Bool) -> JSONResult {
+    func droppedDOMs(runNumber: Int) -> JSONResult {
 
         var cmd: String
         if rootURL.rangeOfString("localhost/~dglo") == nil {
@@ -204,7 +201,7 @@ public class LiveAPI: RestAPI {
 
         let fullURL = "\(rootURL)/\(cmd)/\(runNumber)/"
         let url: NSURL! = NSURL(string: fullURL)
-        
+
         var postData: NSData
         if let pd = dictToPostData(["user": self.username, "pass": self.password]) {
             postData = pd
@@ -233,4 +230,3 @@ public class LiveAPI: RestAPI {
         }
     }
 }
-

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, LiveAPIProtocol {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LiveAPIProtocol {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var runNumField: UITextField!
@@ -18,6 +18,8 @@ class ViewController: UIViewController, LiveAPIProtocol {
 
     let usernameKey = "username"
 
+    let textCellName = "DOMCell"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let user = NSUserDefaults.standardUserDefaults().stringForKey(usernameKey) {
@@ -30,6 +32,9 @@ class ViewController: UIViewController, LiveAPIProtocol {
                 passwordField.becomeFirstResponder()
             }
         }
+
+        tableView.delegate = self
+        tableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -85,14 +90,57 @@ class ViewController: UIViewController, LiveAPIProtocol {
         }
         let live = LiveAPI(rootURL: rootURL, username: username, password: password)
         live.delegate = self
-        live.droppedDOMs(runNum, immediately: false)
+        live.droppedDOMs(runNum)
     }
 
     // LiveAPIProtocol method
     func didReceiveResponse(results: [String: AnyObject]) {
-        dropped.load(results)
-        print("Loaded \(dropped.count) dropped DOMs")
-        tableView.reloadData()
+        dispatch_async(dispatch_get_main_queue(), {
+            self.dropped.load(results)
+print("Loaded \(self.dropped.count) dropped DOMs")
+            self.tableView.reloadData()
+print("Reloaded \(self.tableView)")
+        })
+    }
+
+
+    // UITableViewDataSource method
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+
+    // UITableViewDataSource method
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(textCellName, forIndexPath: indexPath) as UITableViewCell
+
+        let row = indexPath.row
+
+        var colstr: String
+        if row < 0 || row > dropped.count {
+            colstr = "?? No data for row \(row)"
+        } else if let dom = dropped.entry(row) {
+            colstr = "\(dom.name) (\(dom.string)-\(dom.position))"
+        } else {
+            colstr = "?? No DOM for row \(row)"
+        }
+
+        cell.textLabel?.text = colstr
+        
+        return cell
+    }
+
+    // UITableViewDataSource method
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.dropped.count
+    }
+
+    // UITableViewDelegate method
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+        let row = indexPath.row
+        print("Selected \(row)")
+        print("Row => \(self.dropped.entry(row))")
     }
 }
 
