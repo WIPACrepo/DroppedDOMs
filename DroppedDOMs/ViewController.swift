@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let usernameKey = "username"
 
     let textCellName = "DOMCell"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         if let user = NSUserDefaults.standardUserDefaults().stringForKey(usernameKey) {
@@ -44,11 +44,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // LiveAPIProtocol method
     func didReceiveError(error: NSError) {
-        showError("Error", error.localizedDescription)
+        showError("Error \(error.code)", error.localizedDescription)
     }
 
     func showError(title: String, _ message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: title, message: message,
+                                      preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            // ...
+        }
+        alert.addAction(okAction);
+
         presentViewController(alert, animated: true, completion: nil)
 
     }
@@ -60,7 +66,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
 
         guard let password = passwordField.text else {
-            showError("Missing password", "Please enter password for \(username)")
+            showError("Missing password",
+                      "Please enter password for \(username)")
             return
         }
 
@@ -75,20 +82,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
 
         if username != "" {
-            NSUserDefaults.standardUserDefaults().setObject(username, forKey: usernameKey)
+            NSUserDefaults.standardUserDefaults()
+              .setObject(username, forKey: usernameKey)
             if !Keychain.setString(password, forKey: username) {
-                showError("WARNING", "Cannot save password for user \(username)")
+                showError("WARNING",
+                          "Cannot save password for user \(username)")
             }
         }
 
-        let debug = true
+        let debug = false
         var rootURL: String
         if debug {
             rootURL = "http://localhost/~dglo/cgi-bin"
         } else {
             rootURL = "https://live.icecube.wisc.edu"
         }
-        let live = LiveAPI(rootURL: rootURL, username: username, password: password)
+        let live = LiveAPI(rootURL: rootURL, username: username,
+                           password: password)
         live.delegate = self
         live.droppedDOMs(runNum)
     }
@@ -110,7 +120,9 @@ print("Reloaded \(self.tableView)")
     }
 
     // UITableViewDataSource method
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView,
+                   cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCellWithIdentifier(textCellName, forIndexPath: indexPath) as UITableViewCell
 
         let row = indexPath.row
@@ -125,17 +137,21 @@ print("Reloaded \(self.tableView)")
         }
 
         cell.textLabel?.text = colstr
-        
+
         return cell
     }
 
     // UITableViewDataSource method
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int
+    {
         return self.dropped.count
     }
 
     // UITableViewDelegate method
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView,
+                   didSelectRowAtIndexPath indexPath: NSIndexPath)
+    {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
 
         let row = indexPath.row
@@ -143,4 +159,3 @@ print("Reloaded \(self.tableView)")
         print("Row => \(self.dropped.entry(row))")
     }
 }
-

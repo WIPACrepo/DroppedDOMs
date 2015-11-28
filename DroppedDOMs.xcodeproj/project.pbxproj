@@ -213,6 +213,7 @@
 				TargetAttributes = {
 					E83EC34B1BA4B48C00925856 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = TBPCQRS22G;
 					};
 					E83EC35F1BA4B48C00925856 = {
 						CreatedOnToolsVersion = 7.0;
@@ -426,6 +427,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = DroppedDOMs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.glowacki.DroppedDOMs;
@@ -437,6 +439,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = DroppedDOMs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.glowacki.DroppedDOMs;

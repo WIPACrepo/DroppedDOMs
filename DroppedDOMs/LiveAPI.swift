@@ -20,7 +20,8 @@ protocol RequestSubject: AnyObject {
 }
 
 protocol JSONRequester {
-    func request(subject: RequestSubject, url: NSURL, postData: NSData) -> JSONResult
+    func request(subject: RequestSubject, url: NSURL,
+                 postData: NSData) -> JSONResult
 }
 
 class DefaultRequester: JSONRequester {
@@ -31,13 +32,17 @@ class DefaultRequester: JSONRequester {
     /// - returns: - `JSONResult.Success` if the call succeeded
     ///           - `JSONResult.Delayed` for asynchronous calls
     ///           - `JSONResult.Error` if there was a problem
-    func request(subject: RequestSubject, url: NSURL, postData: NSData) -> JSONResult {
+    func request(subject: RequestSubject, url: NSURL,
+                 postData: NSData) -> JSONResult
+    {
 
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         request.HTTPBody = postData
-        request.setValue(String(postData.length), forHTTPHeaderField: "Content-Length")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue(String(postData.length),
+                         forHTTPHeaderField: "Content-Length")
+        request.setValue("application/x-www-form-urlencoded",
+                         forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
         startAsynchronous(request, subject: subject)
@@ -47,15 +52,18 @@ class DefaultRequester: JSONRequester {
 
     func startAsynchronous(request: NSURLRequest, subject: RequestSubject) {
         let session = NSURLSession.sharedSession()
+print("URLRequest \(request)")
         let task = session.dataTaskWithRequest(request) {
             (data, response, error) -> Void in
             if error != nil {
                 subject.processError(error!)
             } else if data != nil {
+print("SessionData \(data)")
                 subject.processData(data!)
             } else {
                 let errmsg = "Request did not return any data"
-                let error = NSError(domain: "RESTAPI", code: 600, userInfo: ["message": errmsg])
+                let error = NSError(domain: "RESTAPI", code: 600,
+                                    userInfo: ["message": errmsg])
                 subject.processError(error)
             }
         }
@@ -131,7 +139,8 @@ public class RestAPI: NSObject, RequestSubject {
                 return
             }
             let errmsg = "Could not convert response to dictionary"
-            let error = NSError(domain: "LiveAPI", code: 6661, userInfo: ["message": errmsg])
+            let error = NSError(domain: "LiveAPI", code: 6661,
+                                userInfo: ["message": errmsg])
             didReceiveError(error)
             return
         }
@@ -146,7 +155,8 @@ public class RestAPI: NSObject, RequestSubject {
         }
 
         print("LiveAPI error \(errmsg)")
-        let error = NSError(domain: "LiveAPI", code: 6662, userInfo: ["message": errmsg])
+        let error = NSError(domain: "LiveAPI", code: 6662,
+                            userInfo: ["message": errmsg])
         didReceiveError(error)
     }
 
@@ -203,7 +213,9 @@ public class LiveAPI: RestAPI {
         let url: NSURL! = NSURL(string: fullURL)
 
         var postData: NSData
-        if let pd = dictToPostData(["user": self.username, "pass": self.password]) {
+        if let pd = dictToPostData(["user": self.username,
+                                    "pass": self.password])
+        {
             postData = pd
         } else {
             return .Error(message: "Cannot encode username and/or password")
@@ -217,7 +229,7 @@ public class LiveAPI: RestAPI {
     /// - parameter NSError: error returned by REST call
     override func didReceiveError(error: NSError) {
         NSOperationQueue.mainQueue().addOperationWithBlock {
-            delegate?.didReceiveError(error)
+            self.delegate?.didReceiveError(error)
         }
     }
 
@@ -226,7 +238,7 @@ public class LiveAPI: RestAPI {
     /// - parameter AnyObject: JSON response
     override func didReceiveResponse(jsondata: [String: AnyObject]) {
         NSOperationQueue.mainQueue().addOperationWithBlock {
-            delegate?.didReceiveResponse(jsondata)
+            self.delegate?.didReceiveResponse(jsondata)
         }
     }
 }
