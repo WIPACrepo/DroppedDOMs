@@ -44,7 +44,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     // LiveAPIProtocol method
     func didReceiveError(error: NSError) {
-        showError("Error \(error.code)", error.localizedDescription)
+        var errstr = error.localizedDescription
+        if let val = error.userInfo["message"] {
+            errstr = "\(error.localizedDescription): \(val)"
+        }
+        showError("Error \(error.code)", errstr)
     }
 
     func showError(title: String, _ message: String) {
