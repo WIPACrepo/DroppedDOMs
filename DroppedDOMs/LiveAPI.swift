@@ -54,18 +54,33 @@ class DefaultRequester: JSONRequester {
         let session = NSURLSession.sharedSession()
 print("URLRequest \(request)")
         let task = session.dataTaskWithRequest(request) {
-            (data, response, error) -> Void in
+            (rawdata, rawresp, error) -> Void in
             if error != nil {
+print("Error err \(error) resp \(rawresp)")
                 subject.processError(error!)
-            } else if data != nil {
-print("SessionData \(data)")
-                subject.processData(data!)
-            } else {
-                let errmsg = "Request did not return any data"
-                let error = NSError(domain: "RESTAPI", code: 600,
-                                    userInfo: ["message": errmsg])
-                subject.processError(error)
+                return
             }
+
+            if let data = rawdata {
+                if data.length > 0 {
+print("SessionData \(data.length) bytes")
+                    subject.processData(data)
+                    return
+                }
+            }
+
+            var errmsg = "Request did not return any data"
+            let response = rawresp as! NSHTTPURLResponse?
+            if let httpresp = response {
+                if httpresp.statusCode < 200 || httpresp.statusCode > 299 {
+                    errmsg = "Unexpected HTTP response \(httpresp.statusCode)"
+                }
+            }
+
+print("Bad response \(rawresp)")
+            let error = NSError(domain: "RESTAPI", code: 600,
+                                userInfo: ["message": errmsg])
+            subject.processError(error)
         }
         task.resume()
     }
@@ -123,41 +138,25 @@ public class RestAPI: NSObject, RequestSubject {
     /// - returns: - `JSONResult.Success` if the data was converted
     ///           - `JSONResult.Error` if there was a problem
     public func processData(data: NSData) {
-        var jsonError: NSError?
-
         var rawResult: AnyObject?
         do {
             rawResult = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers)
         } catch let error as NSError {
-            print("Conversion failed: \(error)")
-            jsonError = error
-            rawResult = nil
-        }
-        if jsonError == nil {
-            if let result = rawResult as? [String: AnyObject] {
-                didReceiveResponse(result)
-                return
-            }
-            let errmsg = "Could not convert response to dictionary"
-            let error = NSError(domain: "LiveAPI", code: 6661,
-                                userInfo: ["message": errmsg])
+ print("Conversion failed: \(error)")
             didReceiveError(error)
             return
         }
 
-        let bogus = NSString(data: data, encoding:NSUTF8StringEncoding)
-
-        var errmsg: String
-        if jsonError != nil {
-            errmsg = "JSON \(bogus) error \(jsonError)"
-        } else {
-            errmsg = "Bad JSON string \(bogus)"
+        if let result = rawResult as? [String: AnyObject] {
+            didReceiveResponse(result)
+            return
         }
 
-        print("LiveAPI error \(errmsg)")
-        let error = NSError(domain: "LiveAPI", code: 6662,
+        let errmsg = "Could not convert response to dictionary"
+        let error = NSError(domain: "LiveAPI", code: 6661,
                             userInfo: ["message": errmsg])
         didReceiveError(error)
+        return
     }
 
     func processError(error: NSError) {
