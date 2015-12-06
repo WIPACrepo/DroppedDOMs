@@ -35,6 +35,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
         tableView.delegate = self
         tableView.dataSource = self
+
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        view.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,6 +53,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             errstr = "\(error.localizedDescription): \(val)"
         }
         showError("Error \(error.code)", errstr)
+    }
+
+    // UITapGestureRecognizer calls this when a non-UI tap happens
+    func dismissKeyboard() {
+        // Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
 
     func showError(title: String, _ message: String) {
@@ -84,6 +94,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             showError("Bad run number", "Bad run number \(runNumField.text)")
             return
         }
+
+        // hide active keyboard
+        view.endEditing(true)
 
         if username != "" {
             NSUserDefaults.standardUserDefaults()
