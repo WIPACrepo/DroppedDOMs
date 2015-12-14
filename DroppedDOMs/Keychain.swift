@@ -9,6 +9,7 @@
 import Foundation
 
 public class Keychain {
+
     public class func getData(key: String) -> NSData? {
         let query = [
             kSecClass as String: kSecClassGenericPassword,
@@ -26,10 +27,10 @@ public class Keychain {
 
             return result as? NSData
         }
-        
+
         return nil
     }
-    
+
     public class func getString(key: String) -> String? {
         if let data = getData(key) {
             if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as String? {
@@ -42,7 +43,7 @@ public class Keychain {
 
     public class func setData(value: NSData, forKey key: String) -> Bool {
         let access = kSecAttrAccessibleWhenUnlocked as String
-        
+
         let query = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -52,17 +53,17 @@ public class Keychain {
 
         let qref = query as CFDictionaryRef
         SecItemDelete(qref)
-        
+
         let status: OSStatus = SecItemAdd(qref, nil)
-        
+
         return status == noErr
     }
-    
+
     public class func setString(value: String, forKey key: String) -> Bool {
         if let vstr = value.dataUsingEncoding(NSUTF8StringEncoding) {
             return setData(vstr, forKey: key)
         }
-        
+
         return false
     }
 }

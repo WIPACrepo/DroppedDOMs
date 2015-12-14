@@ -140,7 +140,7 @@ public class RestAPI: NSObject, RequestSubject {
     public func processData(data: NSData) {
         var rawResult: AnyObject?
         do {
-            rawResult = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.MutableContainers)
+            rawResult = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers)
         } catch let error as NSError {
  print("Conversion failed: \(error)")
             didReceiveError(error)
